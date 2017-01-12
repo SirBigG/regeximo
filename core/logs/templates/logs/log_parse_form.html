@@ -1,9 +1,24 @@
 {% extends "base.html" %}
 
 {% block content %}
+    <div class="col-md-6">
     <form method="post" action="{% url 'logs:parse' %}" enctype="multipart/form-data">
         {% csrf_token %}
-        {{ form }}
-        <button class="btn btn-lg btn-success" type="submit">"Submit"</button>
+        {% for error in form.non_field_errors %}
+            <p class="text-justify bg-danger">{{error}}</p>
+        {% endfor %}
+        {% for field in form %}
+            <div class="form-group">
+                <p class="text-left">{{ field.label }}</p>
+                {% for error in field.errors %}
+                    <p class="text-danger">{{ error }}</p>
+                {% endfor %}
+                {{ field }}
+            </div>
+        {% endfor %}
+        <div class="form-group">
+            <button class="btn btn-success" type="submit">Submit</button>
+        </div>
     </form>
+    </div>
 {% endblock %}
