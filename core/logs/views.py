@@ -26,7 +26,7 @@ class SearchView(ListView):
         if self.request.GET.get('regex', None):
             qs = qs.filter(text__regex=r'^%s' % self.request.GET.get('regex'))
         if self.request.GET.get('text', None):
-            pass
+            qs = qs.filter(text__search=self.request.GET.get('text'))
         return qs
 
     def get_context_data(self, **kwargs):
