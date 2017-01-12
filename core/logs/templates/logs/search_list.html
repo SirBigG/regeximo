@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load logs_extras %}
+
+{% block content %}
+    <div class="search-form clearfix">
+        <form class="form-inline" method="get" action="{% url 'logs:search' %}">
+            {% for error in form.non_field_errors %}
+                <p class="text-justify bg-danger">{{error}}</p>
+            {% endfor %}
+            {% for field in form %}
+                <div class="form-group">
+                    <p class="text-left">{{ field.label }}</p>
+                    {% for error in field.errors %}
+                        <p class="text-danger">{{ error }}</p>
+                    {% endfor %}
+                    {{ field }}
+                </div>
+            {% endfor %}
+            <button class="btn btn-success" type="submit">Search</button>
+        </form>
+    </div>
+    <div class="count">
+        <h4>Find {{ count }} items.</h4>
+    </div>
+    <div class="items clearfix">
+        {% for item in object_list %}
+            <p class="text-info"><span class="clearfix">{{ item.text }}</span></p>
+        {% endfor %}
+    </div>
+    <div class="pagination-block clearfix">
+        <nav>
+  {% if paginator.num_pages > 1 %}
+    <ul class="pagination">
+        {% if page_obj.has_previous %}
+            <li><a href="{{ request.path }}?page={{ page_obj.previous_page_number }}&{{ params }}" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+        {% else %}
+          <li class="disabled"><a href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+        {% endif %}
+        {% for i in paginator.num_pages|times %}
+          {% if page_obj.number == i %}
+              <li class="active"><a href="#">{{ i }}<span class="sr-only"></span></a></li>
+          {% else %}
+              <li><a href="{{ request.path }}?page={{ i }}&{{ params }}">{{ i }}<span class="sr-only"></span></a></li>
+          {% endif %}
+        {% endfor %}
+        {% if page_obj.has_next %}
+            <li><a href="{{ request.path }}?page={{ page_obj.next_page_number }}&{{ params }}" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
+        {% else %}
+            <li class="disabled"><a href="#" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
+        {% endif %}
+    </ul>
+  {% endif %}
+</nav>
+    </div>
+{% endblock %}

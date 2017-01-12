@@ -23,3 +23,12 @@ class IndexViewTests(TestCase):
         response = self.client.get(reverse('index'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'index.html')
+
+
+class SearchViewTests(TestCase):
+    def test_response_get(self):
+        response = self.client.get(reverse('logs:search'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'logs/search_list.html')
+        response = self.client.get(reverse('logs:search'), data={'regex': ''})
+        self.assertEqual(response.status_code, 200)

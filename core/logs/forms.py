@@ -16,6 +16,6 @@ class LogParsingForm(forms.Form):
 
 
 class SearchLogForm(forms.Form):
-    name = forms.CharField(required=False)
-    regex = forms.CharField(required=False)
-    text = forms.CharField(required=False)
+    name = forms.CharField(required=False, widget=forms.TextInput(attrs={'class': "form-control"}))
+    regex = forms.CharField(required=False, widget=forms.TextInput(attrs={'class': "form-control"}))
+    text = forms.CharField(required=False, widget=forms.TextInput(attrs={'class': "form-control"}))
