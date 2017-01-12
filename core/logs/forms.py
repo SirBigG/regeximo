@@ -8,11 +8,20 @@ class LogParsingForm(forms.Form):
     file = forms.FileField(widget=forms.FileInput(attrs={'class': "form-control"}))
 
     def save(self):
-        to_save = [
-            SiteLog(site_name=self.cleaned_data['site_name'],
-                    text=_line) for _line in self.cleaned_data['file'].readlines()
-            if str(_line).replace('\n', '')]
-        SiteLog.objects.bulk_create(to_save)
+        i = 0
+        to_save = list()
+        site_name = self.cleaned_data['site_name']
+        for _line in self.cleaned_data['file'].readlines():
+            _line = _line.decode("utf-8").replace('\n', '')
+            if _line:
+                to_save.append(SiteLog(site_name=site_name, text=_line))
+            if i == 100:
+                SiteLog.objects.bulk_create(to_save)
+                to_save = []
+                i = 0
+            i += 1
+        else:
+            SiteLog.objects.bulk_create(to_save)
 
 
 class SearchLogForm(forms.Form):
