@@ -1,5 +1,5 @@
 from django.views.generic import FormView, ListView
-from django.http import HttpResponseRedirect, QueryDict
+from django.http import HttpResponseRedirect
 
 from core.logs.forms import LogParsingForm, SearchLogForm
 from core.logs.models import SiteLog
@@ -26,7 +26,7 @@ class SearchView(ListView):
         if self.request.GET.get('regex', None):
             qs = qs.filter(text__regex=r'^%s' % self.request.GET.get('regex'))
         if self.request.GET.get('text', None):
-            qs = qs.filter(text__search=self.request.GET.get('text'))
+            qs = qs.filter(text__contains=str(self.request.GET.get('text')))
         return qs
 
     def get_context_data(self, **kwargs):
